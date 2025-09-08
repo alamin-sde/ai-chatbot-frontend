@@ -5,6 +5,7 @@ import type { RegisterFormDataType } from "../types/registerFormData.type"
 import InputField from "../components/ui/InputField"
 import LoadingSpinner from "../components/ui/LoadingSpinner"
 import { Link } from "react-router-dom"
+import api from "../services/api"
 
 const Register = () => {
     const [formData, setFormData] = useState<RegisterFormDataType>({} as RegisterFormDataType);
@@ -20,9 +21,14 @@ const Register = () => {
             }
         })
     }
-    
+    const handleSubmit = async()=>{
+         await api.get('/users').then((res)=>{
+            console.log(res)
+         })
+    }
+    console.log("base url:", import.meta.env.VITE_BASE_URL,api);
     return (
-        <div className=" min-h-screen  flex justify-center items-center py-12">
+        <div className="flex justify-center items-center py-12">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -35,11 +41,11 @@ const Register = () => {
                             <MessageCircle className="w-8 h-8 text-white" />
                         </div>
                     </div>
-                    <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">Create your account</h2>
+                    <h2 className="mt-6 text-3xl font-bold text-gray-900">Create your account</h2>
                     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Join thousand of users chatting with AI</p>
                 </div>
-                <motion.form
-                    onSubmit={() => { }}
+                <div
+                    // onSubmit={() => { }}
                     className="card p-8"
                 >
                     <div className="space-y-4">
@@ -108,7 +114,8 @@ const Register = () => {
                             </label>
                         </div>
                         <button
-                            type="submit"
+                            // type="submit"
+                            onClick={handleSubmit}
                             disabled={loading}
                             className="btn-primary w-full justify-center items-center"
                         >
@@ -126,7 +133,7 @@ const Register = () => {
                             </p>
                         </div>
                     </div>
-                </motion.form>
+                </div>
             </motion.div>
         </div>
 
