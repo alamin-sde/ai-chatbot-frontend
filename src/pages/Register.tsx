@@ -5,28 +5,34 @@ import type { RegisterFormDataType } from "../types/registerFormData.type"
 import InputField from "../components/ui/InputField"
 import LoadingSpinner from "../components/ui/LoadingSpinner"
 import { Link } from "react-router-dom"
-import api from "../services/api"
+import { useAuth } from "../contexts/AuthContext"
+import { UserRegisterType } from "../types/register.user.type"
 
 const Register = () => {
-    const [formData, setFormData] = useState<RegisterFormDataType>({} as RegisterFormDataType);
+    const [userData, setUserData] = useState<RegisterFormDataType>({} as RegisterFormDataType);
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-    const [loading,setLoading]=useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false);
+    const { register,user} = useAuth();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => {
+        setUserData((prev) => {
             return {
                 ...prev,
                 [name]: value
             }
         })
     }
-    const handleSubmit = async()=>{
-         await api.get('/users').then((res)=>{
-            console.log(res)
-         })
+    const handleSubmit =async() => {
+        const payload:UserRegisterType={
+            username: userData.username!,
+            email: userData.email!,
+            password: userData.password!,
+        }
+        register(payload);
+       
     }
-    console.log("base url:", import.meta.env.VITE_BASE_URL,api);
+    console.log(user)
     return (
         <div className="flex justify-center items-center py-12">
             <motion.div
@@ -55,7 +61,7 @@ const Register = () => {
                             label="Username"
                             autoComplete="username"
                             placeholder="Select an option"
-                            value={formData?.username ?? ""}
+                            value={userData?.username ?? ""}
                             onChange={handleChange}
                             icon={<User className="w-5 h-5" />}
                         />
@@ -65,7 +71,7 @@ const Register = () => {
                             autoComplete="email"
                             label="Email Address"
                             placeholder="Enter your email"
-                            value={formData?.email ?? ""}
+                            value={userData?.email ?? ""}
                             onChange={handleChange}
                             icon={<Mail className="w-5 h-5" />}
                         />
@@ -76,7 +82,7 @@ const Register = () => {
                             label="Password"
                             placeholder="Create a password"
                             isPassword={true}
-                            value={formData?.password ?? ""}
+                            value={userData?.password ?? ""}
                             onChange={handleChange}
                             handleShowPassword={() => setShowPassword(!showPassword)}
                             showPassword={showPassword}
@@ -89,7 +95,7 @@ const Register = () => {
                             label="Confirm Password"
                             placeholder="Confirm your password"
                             isPassword={true}
-                            value={formData?.confirmPassword ?? ""}
+                            value={userData?.confirmPassword ?? ""}
                             onChange={handleChange}
                             handleShowPassword={() => setShowConfirmPassword(!showConfirmPassword)}
                             showPassword={showConfirmPassword}
