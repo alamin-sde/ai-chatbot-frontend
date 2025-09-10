@@ -3,7 +3,7 @@ import { UserType } from "../types/user.type";
 import { UserRegisterType } from "../types/register.user.type";
 import api from "../services/api";
 import toast from "react-hot-toast";
-import { AuthContextType } from "../types/authContext.type";
+import { ProviderPropsType } from "../types/provider.props.type";
 
 const AuthContext = createContext({} as any)
 export const useAuth = () => {
@@ -13,7 +13,7 @@ export const useAuth = () => {
     }
     return context;
 }
-export const AuthProvider = ({ children }: AuthContextType) => {
+export const AuthProvider = ({ children }: ProviderPropsType) => {
     const [user, setUser] = useState<UserType>({} as UserType);
     const register = async (userData: UserRegisterType) => {
         try {
@@ -27,13 +27,12 @@ export const AuthProvider = ({ children }: AuthContextType) => {
             return { success: true }
 
         } catch (error: any) {
-            const message = error.response?.data?.error || 'Registration failed'
+            const message = error.message || 'Registration failed'
             toast.error(message)
             return { success: false, error: message }
 
         }
-
-
+       
     }
     const value = {
         user,

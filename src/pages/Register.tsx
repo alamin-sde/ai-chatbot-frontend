@@ -24,12 +24,19 @@ const Register = () => {
         })
     }
     const handleSubmit =async() => {
+        setLoading(true)
         const payload:UserRegisterType={
             username: userData.username!,
             email: userData.email!,
             password: userData.password!,
         }
-        register(payload);
+        const result = await register(payload);
+        setLoading(false)
+        if(result.success){
+            setUserData({} as RegisterFormDataType)
+        }else{
+
+        }
        
     }
     console.log(user)

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import type { ThemeContextType } from "../types/themeContext.type";
 import type { ThemeProviderValueType } from "../types/themeProvider.type";
+import { ProviderPropsType } from "../types/provider.props.type";
 const ThemeContext = createContext({}as ThemeProviderValueType);
 //custom hooks
 export const useTheme = () => {
@@ -11,7 +11,7 @@ export const useTheme = () => {
     return context;
 }
 // ThemeProvider
-const ThemeProvider = ({ children }: ThemeContextType) => {
+const ThemeProvider = ({ children }: ProviderPropsType) => {
     const [theme, setTheme] = useState(() => {
         if (typeof window !== undefined) {
             return localStorage.getItem("theme") || "light"
