@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import { Toaster } from 'react-hot-toast'
 import { useLoading } from './contexts/LoadingContext'
 import LoadingSpinner from './components/ui/LoadingSpinner'
+import Chat from './pages/Chat'
 
 function App() {
   const { loading } = useLoading();
@@ -24,6 +25,7 @@ function App() {
         <Route path='/test' Component={Test} />
         <Route path='/register' Component={Register} />
         <Route path='/login' Component={Login} />
+        <Route path='/chat' Component={Chat} />
       </Routes>
       <Toaster
         position='top-right'
