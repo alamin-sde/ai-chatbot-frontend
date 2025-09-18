@@ -3,9 +3,24 @@ import { Lock, MessageCircle, User } from "lucide-react";
 import InputField from "../components/ui/InputField";
 import { useState } from "react";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAuth } from "../contexts/AuthContext";
+import { LogInType } from "../types/login.type";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [loading,setLoading]=useState<boolean>(false)
+    const [credentials,setCredentials]=useState<LogInType>({} as LogInType)
+    const {login}=useAuth();
+     const navigate = useNavigate()
+    const handleLogin=async()=>{
+        setLoading(true)
+        const response=await login(credentials)
+        setLoading(false)
+        if(response.success){
+            setCredentials({} as LogInType);
+            navigate('/chat', { replace: true })
+        }
+    }
     return (
         <div className="py-12 flex justify-center items-center">
             <motion.div
@@ -32,8 +47,8 @@ const Login = () => {
                             label="Username"
                             autoComplete="username"
                             placeholder="Enter your email or username"
-                            value={""}
-                            onChange={() => { }}
+                            value={credentials?.username ?? ""}
+                            onChange={(e) =>setCredentials((prev)=>({...prev,username:e.target.value})  )}
                             icon={<User className="w-5 h-5" />}
                         />
                         <InputField
@@ -43,8 +58,8 @@ const Login = () => {
                             autoComplete="password"
                             isPassword={true}
                             placeholder="Enter your password"
-                            value={""}
-                            onChange={() => { }}
+                            value={credentials?.password??""}
+                            onChange={(e) =>setCredentials((prev)=>({...prev,password:e.target.value}))}
                             icon={<Lock className="w-5 h-5" />}
                         />
                         <div className="flex  justify-between ">
@@ -65,6 +80,7 @@ const Login = () => {
                         </div>
                         <button
                             className="btn btn-primary w-full"
+                            onClick={handleLogin}
                         >
                             {loading ? <div className="flex items-center justify-center gap-2">
                                 <LoadingSpinner size="sm" className="" /> Signing...
