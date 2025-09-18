@@ -7,8 +7,7 @@ const api = axios.create({
 })
 api.interceptors.request.use(
     (config) => {
-        // const token = localStorage.getItem('token')
-        const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGJkNjk0YTVhYjVkMGZmNTlmZDhjNzUiLCJpYXQiOjE3NTczNjkxMzIsImV4cCI6MTc1Nzk3MzkzMn0.y9hsy9_aNzoSCUu7Qmt-VXCIt7gIf-pHBAULJqinIug'
+        const token = localStorage.getItem('token')
         if (token) {
 
             config.headers['Authorization'] = `Bearer ${token}`
@@ -27,7 +26,7 @@ api.interceptors.response.use(
     },
     (error) => {
         const message = error.response?.data?.message || error.message;
-        // console.log("API Error:", message);
+        console.log("API Error:", message);
         return Promise.reject(error)
 
     }
