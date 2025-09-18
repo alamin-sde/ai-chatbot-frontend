@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import ThemeProvider from './contexts/ThemeContext.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
 import { LoadingProvider } from './contexts/LoadingContext.tsx'
+import { ChatProvider } from './contexts/ChatContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')!).render(
       <ThemeProvider>
         <AuthProvider>
           <LoadingProvider>
-            <App />
+            <ChatProvider>
+              <App />
+            </ChatProvider>
           </LoadingProvider>
         </AuthProvider>
       </ThemeProvider>
