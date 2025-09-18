@@ -4,6 +4,8 @@ import { UserRegisterType } from "../types/register.user.type";
 import api from "../services/api";
 import toast from "react-hot-toast";
 import { ProviderPropsType } from "../types/provider.props.type";
+import { LogInType } from "../types/login.type";
+import { AuthContextValuetype } from "../types/authContext.type";
 
 const AuthContext = createContext({} as any)
 export const useAuth = () => {
@@ -34,9 +36,28 @@ export const AuthProvider = ({ children }: ProviderPropsType) => {
         }
        
     }
-    const value = {
+    const login =async(credentials:LogInType)=>{
+        try{
+            const response = await api.post('/login',credentials)
+            const {token,user}=response.data
+            if(token){
+                localStorage.setItem('token',token)
+            }
+            setUser(user)
+            toast.success('Welcome back!')
+            return {success:true}
+
+        }catch(error){
+            console.log("login failed",error)
+            toast.error('Login failed. Please check your credentials.')
+            return {success:false}
+        }
+
+    }
+    const value:AuthContextValuetype = {
         user,
-        register
+        register,
+        login
     }
     return (
         <AuthContext.Provider value={value}>
