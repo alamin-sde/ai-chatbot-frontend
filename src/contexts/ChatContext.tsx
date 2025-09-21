@@ -3,6 +3,7 @@ import { ProviderPropsType } from "../types/provider.props.type"
 import api from "../services/api"
 import { ChatContextValueType } from "../types/chatContext.type"
 import { MessageDataType } from "../types/message-type"
+import { ChatTitileType } from "../types/chat-title-type"
 
 const chatContext = createContext({})
 export const useChat=()=>{
@@ -15,6 +16,7 @@ export const useChat=()=>{
 export const ChatProvider =({children}:ProviderPropsType)=>{
     const [messages,setMessages]=useState<MessageDataType[]>([])
     const [quickReplies,setQuickReplies]=useState<string[]>([])
+    const [chatTitles,setChatTitles]=useState<ChatTitileType[]>([]);
     const initializeChat=()=>{
         console.log("initialize chat")
         loadQuickReplies()
@@ -40,13 +42,23 @@ export const ChatProvider =({children}:ProviderPropsType)=>{
 
 
     }
-    const loadChatHistory=async()=>{
-        
+    const loadChatHistory=async(searchTitle:string)=>{
+        try{
+            const response=await api.post('/chat/chat-history',{searchTitle})
+            setChatTitles(response.data)
+          
+        }catch(error){
+            console.log("failed to load chat history",error)
+        }
+
     }
     const value:ChatContextValueType={
         messages,
+        chatTitles,
         quickReplies,
-        initializeChat
+        initializeChat,
+        loadChatHistory,
+
     }
     
     return(
