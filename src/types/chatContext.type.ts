@@ -1,5 +1,7 @@
+import { MessageDataType } from "./message-type"
+
 export type ChatContextValueType={
-    messages:string[],
+    messages:MessageDataType[],
     quickReplies:string[],
     initializeChat:()=>void
    
