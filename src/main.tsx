@@ -7,6 +7,7 @@ import ThemeProvider from './contexts/ThemeContext.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
 import { LoadingProvider } from './contexts/LoadingContext.tsx'
 import { ChatProvider } from './contexts/ChatContext.tsx'
+import { SidebarContextProvider } from './contexts/SidebarContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,7 +16,9 @@ createRoot(document.getElementById('root')!).render(
         <AuthProvider>
           <LoadingProvider>
             <ChatProvider>
-              <App />
+              <SidebarContextProvider>
+                <App />
+              </SidebarContextProvider>
             </ChatProvider>
           </LoadingProvider>
         </AuthProvider>
