@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast'
 import { useLoading } from './contexts/LoadingContext'
 import LoadingSpinner from './components/ui/LoadingSpinner'
 import Chat from './pages/Chat'
+import Sidebar from './components/layout/Sidebar'
 
 function App() {
   const { loading } = useLoading();
@@ -21,7 +22,8 @@ function App() {
   return (
     <div className='bg-grey-50'>
       <Navbar />
-      <Routes>
+      <Sidebar/>
+      {/* <Routes>
         <Route path='/test' Component={Test} />
         <Route path='/register' Component={Register} />
         <Route path='/login' Component={Login} />
@@ -37,7 +39,7 @@ function App() {
             border: '1px solid #e5e7eb'
           },
         }}
-      />
+      /> */}
 
     </div>
   )
