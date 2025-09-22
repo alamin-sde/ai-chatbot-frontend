@@ -8,16 +8,18 @@ import { LogInType } from "../types/login.type";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-    const [loading,setLoading]=useState<boolean>(false)
-    const [credentials,setCredentials]=useState<LogInType>({} as LogInType)
-    const {login}=useAuth();
-     const navigate = useNavigate()
-    const handleLogin=async()=>{
+    const [loading, setLoading] = useState<boolean>(false)
+    const [credentials, setCredentials] = useState<LogInType>({} as LogInType)
+    const { login } = useAuth();
+    const { setCurrentView } = useAuth();
+    const navigate = useNavigate()
+    const handleLogin = async () => {
         setLoading(true)
-        const response=await login(credentials)
+        const response = await login(credentials)
         setLoading(false)
-        if(response.success){
+        if (response.success) {
             setCredentials({} as LogInType);
+            setCurrentView("")
             navigate('/chat', { replace: true })
         }
     }
@@ -34,7 +36,7 @@ const Login = () => {
                         <div className="h-16 w-16 bg-gradient-to-br text-white from-primary-500 to-secondary-500 rounded-full flex justify-center items-center">
                             <MessageCircle className="h-8 w-8" />
                         </div>
-                    </div>  
+                    </div>
                     <h2 className="text-3xl mt-6 font-bold">Welcome Back</h2>
                     <p className=" mt-2 text-sm text-gray-600 dark:text-gray-400">Sign in to your account to continue chatting</p>
                 </div>
@@ -48,7 +50,7 @@ const Login = () => {
                             autoComplete="username"
                             placeholder="Enter your email or username"
                             value={credentials?.username ?? ""}
-                            onChange={(e) =>setCredentials((prev)=>({...prev,username:e.target.value})  )}
+                            onChange={(e) => setCredentials((prev) => ({ ...prev, username: e.target.value }))}
                             icon={<User className="w-5 h-5" />}
                         />
                         <InputField
@@ -58,8 +60,8 @@ const Login = () => {
                             autoComplete="password"
                             isPassword={true}
                             placeholder="Enter your password"
-                            value={credentials?.password??""}
-                            onChange={(e) =>setCredentials((prev)=>({...prev,password:e.target.value}))}
+                            value={credentials?.password ?? ""}
+                            onChange={(e) => setCredentials((prev) => ({ ...prev, password: e.target.value }))}
                             icon={<Lock className="w-5 h-5" />}
                         />
                         <div className="flex  justify-between ">
@@ -75,7 +77,7 @@ const Login = () => {
                                 </label>
                             </div>
                             <div className="text-sm">
-                                <a href='#'className="text-sm text-primary-600 hover:text-primary-500 ml-">Forgot password</a>
+                                <a href='#' className="text-sm text-primary-600 hover:text-primary-500 ml-">Forgot password</a>
                             </div>
                         </div>
                         <button
@@ -87,7 +89,16 @@ const Login = () => {
                             </div> : "Sign In"}
                         </button>
                     </div>
-                </div> 
+                    <div className="flex flex-col items-center mt-2">
+                        <p>Don't have an account?</p>
+                        <button
+                            className="text-sm text-primary-600"
+                            onClick={() => setCurrentView("register")}
+                        >
+                            Create account
+                        </button>
+                    </div>
+                </div>
             </motion.div>
         </div>
     )

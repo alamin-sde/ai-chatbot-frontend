@@ -13,7 +13,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const { register,user} = useAuth();
+    const { register, user, setCurrentView } = useAuth();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUserData((prev) => {
@@ -23,21 +23,21 @@ const Register = () => {
             }
         })
     }
-    const handleSubmit =async() => {
+    const handleSubmit = async () => {
         setLoading(true)
-        const payload:UserRegisterType={
+        const payload: UserRegisterType = {
             username: userData.username!,
             email: userData.email!,
             password: userData.password!,
         }
         const result = await register(payload);
         setLoading(false)
-        if(result.success){
+        if (result.success) {
             setUserData({} as RegisterFormDataType)
-        }else{
+        } else {
 
         }
-       
+
     }
     console.log(user)
     return (
@@ -138,11 +138,12 @@ const Register = () => {
                         <div className=" text-center text-sm">
                             <p className="text-gray-600">
                                 Already have an account ?{' '}
-                                <Link to='/login'
+                                <button
                                     className="text-primary-600 font-medium focus:text-primary-500"
+                                    onClick={() => setCurrentView("login")}
                                 >
                                     Sign in here
-                                </Link>
+                                </button>
                             </p>
                         </div>
                     </div>

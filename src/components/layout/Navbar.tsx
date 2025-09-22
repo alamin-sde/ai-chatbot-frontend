@@ -5,7 +5,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { useSidebar } from "../../contexts/SidebarContext";
 const Navbar = () => {
     const { theme, toggleTheme } = useTheme()
-    const {toggleSidebar}=useSidebar();
+    const { toggleSidebar } = useSidebar();
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
     return (
         <nav className="text-white border-b shadow-sm border-gray-200 dark:bg-gray-800 dark:border-gray-700">
