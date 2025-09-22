@@ -4,6 +4,8 @@ import { UserType } from "./user.type"
 
 export type AuthContextValuetype={
     user:UserType,
+    currentView:'dashboard'|'login'|'register',
+    setCurrentView?:React.Dispatch<React.SetStateAction<'dashboard'|'login'|'register'>>,
     register:(userData:UserRegisterType)=>Promise<{success:boolean,error?:string}>,
     login:(credentials:LogInType)=>Promise<{success:boolean}>
 }

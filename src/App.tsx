@@ -9,9 +9,13 @@ import { useLoading } from './contexts/LoadingContext'
 import LoadingSpinner from './components/ui/LoadingSpinner'
 import Chat from './pages/Chat'
 import Sidebar from './components/layout/Sidebar'
+import { useAuth } from './contexts/AuthContext'
+import Dashboard from './pages/Dashboard'
 
 function App() {
   const { loading } = useLoading();
+  const { user, currentView } = useAuth();
+  console.log("user in app==>", currentView)
   if (loading) {
     return (
       <div className='flex justify-center items-center min-h-screen'>
@@ -19,16 +23,32 @@ function App() {
       </div>
     )
   }
+  if (currentView === 'dashboard') {
+    return (
+      <Dashboard />
+    )
+
+  } else if (currentView === 'login') {
+    return (
+      <Login />
+    )
+
+  } else if (currentView === "register") {
+    return (
+      <Register />
+    )
+  }
   return (
     <div className='bg-grey-50'>
       <Navbar />
-      <Sidebar/>
+      <Sidebar />
+      <Chat/>
       {/* <Routes>
         <Route path='/test' Component={Test} />
         <Route path='/register' Component={Register} />
         <Route path='/login' Component={Login} />
         <Route path='/chat' Component={Chat} />
-      </Routes>
+      </Routes> */}
       <Toaster
         position='top-right'
         toastOptions={{
@@ -39,7 +59,7 @@ function App() {
             border: '1px solid #e5e7eb'
           },
         }}
-      /> */}
+      />
 
     </div>
   )

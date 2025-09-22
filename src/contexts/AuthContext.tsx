@@ -17,6 +17,7 @@ export const useAuth = () => {
 }
 export const AuthProvider = ({ children }: ProviderPropsType) => {
     const [user, setUser] = useState<UserType>({} as UserType);
+    const [currentView,setCurrentView]=useState<'dashboard'|'login'|'register'>('dashboard')
     const register = async (userData: UserRegisterType) => {
         try {
             const response = await api.post('/register', userData);
@@ -56,6 +57,8 @@ export const AuthProvider = ({ children }: ProviderPropsType) => {
     }
     const value:AuthContextValuetype = {
         user,
+        currentView,
+        setCurrentView,
         register,
         login
     }
