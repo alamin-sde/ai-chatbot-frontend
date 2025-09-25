@@ -20,7 +20,7 @@ const SearchFilter = () => {
         <div className="relative">
             <Search
                 size={20}
-                className="absolute transform  top-1/2 -translate-y-1/2 left-1"
+                className="absolute transform  top-1/2 -translate-y-1/2 left-2"
             />
 
             <input
