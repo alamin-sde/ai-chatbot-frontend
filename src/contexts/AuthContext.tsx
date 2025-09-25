@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { UserType } from "../types/user.type";
 import { UserRegisterType } from "../types/register.user.type";
 import api from "../services/api";
@@ -16,8 +16,11 @@ export const useAuth = () => {
     return context;
 }
 export const AuthProvider = ({ children }: ProviderPropsType) => {
-    const [user, setUser] = useState<UserType>({} as UserType);
-    const [currentView,setCurrentView]=useState<'dashboard'|'login'|'register'>('dashboard')
+    const [user, setUser] = useState<UserType | null>(() => {
+        const storedUser = localStorage.getItem('user');
+        return storedUser ? JSON.parse(storedUser) : null
+    });
+    const [currentView, setCurrentView] = useState<'dashboard' | 'login' | 'register'>('dashboard')
     const register = async (userData: UserRegisterType) => {
         try {
             const response = await api.post('/register', userData);
@@ -35,27 +38,28 @@ export const AuthProvider = ({ children }: ProviderPropsType) => {
             return { success: false, error: message }
 
         }
-       
+
     }
-    const login =async(credentials:LogInType)=>{
-        try{
-            const response = await api.post('/login',credentials)
-            const {token,user}=response.data
-            if(token){
-                localStorage.setItem('token',token)
+    const login = async (credentials: LogInType) => {
+        try {
+            const response = await api.post('/login', credentials)
+            const { token, user } = response.data
+            if (token) {
+                localStorage.setItem('token', token)
             }
             setUser(user)
+            localStorage.setItem('user', JSON.stringify(user))
             toast.success('Welcome back!')
-            return {success:true}
+            return { success: true }
 
-        }catch(error){
-            console.log("login failed",error)
+        } catch (error) {
+            console.log("login failed", error)
             toast.error('Login failed. Please check your credentials.')
-            return {success:false}
+            return { success: false }
         }
 
     }
-    const value:AuthContextValuetype = {
+    const value: AuthContextValuetype = {
         user,
         currentView,
         setCurrentView,
