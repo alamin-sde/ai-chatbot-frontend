@@ -1,10 +1,16 @@
 import { ArrowBigRight, MessageCircle, Moon, Sun } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useAuth } from "../contexts/AuthContext";
+import { Navigate, useNavigate } from "react-router-dom";
+import { nav } from "framer-motion/client";
 
 const Dashboard = () => {
     const { theme, toggleTheme } = useTheme();
     const { setCurrentView } = useAuth();
+    const navigate=useNavigate()
+    const switchToLogin=()=>{
+       navigate('/login',{replace:true})
+    }
     return (
         <div>
             <div className="flex justify-between items-center h-16 px-4 border-b border-gray-200 ">
@@ -36,7 +42,7 @@ const Dashboard = () => {
                     </button>
                     <button
                         className="btn-primary"
-                        onClick={() => setCurrentView("login")}
+                        onClick={switchToLogin}
                     >
                         Login
                     </button>
