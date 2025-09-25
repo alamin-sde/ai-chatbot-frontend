@@ -3,7 +3,7 @@ import { UserRegisterType } from "./register.user.type"
 import { UserType } from "./user.type"
 
 export type AuthContextValuetype={
-    user:UserType,
+    user:UserType|null,
     currentView:'dashboard'|'login'|'register',
     setCurrentView?:React.Dispatch<React.SetStateAction<'dashboard'|'login'|'register'>>,
     register:(userData:UserRegisterType)=>Promise<{success:boolean,error?:string}>,
