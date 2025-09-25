@@ -5,14 +5,16 @@ import { useState } from "react";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useAuth } from "../contexts/AuthContext";
 import { LogInType } from "../types/login.type";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [credentials, setCredentials] = useState<LogInType>({} as LogInType)
-    const { login } = useAuth();
-    const { setCurrentView } = useAuth();
+    const { login,user ,setCurrentView} = useAuth();
     const navigate = useNavigate()
+    if(user){
+        return <Navigate to={'/chat'} replace/>
+    }
     const handleLogin = async () => {
         setLoading(true)
         const response = await login(credentials)
@@ -93,7 +95,7 @@ const Login = () => {
                         <p>Don't have an account?</p>
                         <button
                             className="text-sm text-primary-600"
-                            onClick={() => setCurrentView("register")}
+                            onClick={() => navigate('/register')}
                         >
                             Create account
                         </button>
