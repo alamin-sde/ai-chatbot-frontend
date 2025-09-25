@@ -4,7 +4,7 @@ import { useState } from "react"
 import type { RegisterFormDataType } from "../types/registerFormData.type"
 import InputField from "../components/ui/InputField"
 import LoadingSpinner from "../components/ui/LoadingSpinner"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 import { UserRegisterType } from "../types/register.user.type"
 
@@ -14,6 +14,7 @@ const Register = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const { register, user, setCurrentView } = useAuth();
+    const navigate = useNavigate();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUserData((prev) => {
@@ -140,7 +141,7 @@ const Register = () => {
                                 Already have an account ?{' '}
                                 <button
                                     className="text-primary-600 font-medium focus:text-primary-500"
-                                    onClick={() => setCurrentView("login")}
+                                    onClick={() => navigate('/login')}
                                 >
                                     Sign in here
                                 </button>
