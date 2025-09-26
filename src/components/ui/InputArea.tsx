@@ -1,10 +1,16 @@
 import { Mic, MicOff, Paperclip, Send } from "lucide-react";
 import { useState } from "react";
+import { useChat } from "../../contexts/ChatContext";
 
 const InputArea = () => {
     const [message, setMessage] = useState<string>("");
+    const {sendMessage}=useChat()
     const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(e.target.value)
+
+    }
+    const handleSendMessage=async()=>{
+       sendMessage(message)
 
     }
     return (
@@ -32,6 +38,7 @@ const InputArea = () => {
                         </button>
                         <button
                             className="input-area-btn bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
+                           onClick={handleSendMessage}
                         >
                             <Send size={20} />
                         </button>
