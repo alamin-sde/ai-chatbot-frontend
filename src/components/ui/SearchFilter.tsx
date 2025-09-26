@@ -1,13 +1,10 @@
 import { Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useChat } from "../../contexts/ChatContext";
+import { SearchFilterPropsType } from "../../types/searchFilter.type";
 
-const SearchFilter = () => {
-    const [searchQuery, setSearchQuery] = useState<string>("")
-    const { loadChatTitles } = useChat();
-    useEffect(() => {
-        loadChatTitles(searchQuery)
-    }, [searchQuery])
+const SearchFilter = ({searchQuery,setSearchQuery}:SearchFilterPropsType) => {
+    // const [searchQuery, setSearchQuery] = useState<string>("")
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value)
 

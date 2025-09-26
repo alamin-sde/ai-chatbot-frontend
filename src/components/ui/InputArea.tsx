@@ -1,20 +1,50 @@
 import { Mic, MicOff, Paperclip, Send } from "lucide-react";
 import { useState } from "react";
-import { useChat } from "../../contexts/ChatContext";
+import { InputAreaPropsType } from "../../types/input-area-type";
+import { MessageDataType } from "../../types/message-type";
+import { SendMessageType } from "../../types/send-message.type";
+import api from "../../services/api";
 
-const InputArea = () => {
+const InputArea = ({ currentSessionId, setMessages }: InputAreaPropsType) => {
     const [message, setMessage] = useState<string>("");
-    const {sendMessage}=useChat()
     const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(e.target.value)
 
     }
-    const handleSendMessage=async()=>{
-       sendMessage(message)
+    const handleSendMessage = async () => {
+        sendMessage(message)
+
+    }
+    const sendMessage = async (message: string) => {
+        try {
+
+            if (!message.trim()) return;
+            const userMessage: MessageDataType = {
+                id: Date.now(),
+                role: "user",
+                content: message,
+                timestamp: new Date()
+            }
+            setMessages((prevMessages) => [...prevMessages, userMessage])
+            const payload: SendMessageType = { message: message, sessionId: currentSessionId }
+            const response = await api.post("/chat/send-message", payload)
+            const botMessage: MessageDataType = {
+                id: Date.now() + 1,
+                role: 'assistant',
+                content: response.data.message,
+                timestamp: response.data.timestamp
+
+            }
+            setMessages((prevMessages) => [...prevMessages, botMessage])
+        } catch (error) {
+            console.log("failed to send message for", error)
+        }
+
+
 
     }
     return (
-        <div  className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
             <div className="max-w-4xl mx-auto p-4">
                 <div className="flex  items-end gap-3 ">
                     <textarea
@@ -38,7 +68,7 @@ const InputArea = () => {
                         </button>
                         <button
                             className="input-area-btn bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
-                           onClick={handleSendMessage}
+                            onClick={handleSendMessage}
                         >
                             <Send size={20} />
                         </button>

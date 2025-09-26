@@ -1,13 +1,9 @@
 import { MessageSquare } from "lucide-react";
-import { useChat } from "../contexts/ChatContext";
 import { useEffect } from "react";
+import MessageContent from "./MessageContent";
+import { MessageListPropsType } from "../types/message-list-type";
 
-const MessageList = () => {
-    const { messages, loadChatHistory,currentSessionId } = useChat();
-    useEffect(() => {
-        loadChatHistory()
-    }, [currentSessionId])
-   
+const MessageList = ({messages=[]}:MessageListPropsType) => {
     return (
         <div className=" h-full">
             {messages.length === 0 ?
@@ -26,7 +22,9 @@ const MessageList = () => {
                 </div>
                 :
                 <div>
-                    message
+                    <MessageContent
+                     messages={messages}
+                    />
                 </div>
             }
 
