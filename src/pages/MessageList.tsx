@@ -1,9 +1,14 @@
 import { MessageSquare } from "lucide-react";
 import { useChat } from "../contexts/ChatContext";
+import { useEffect } from "react";
 
-const MessageList=()=>{
-    const {messages,initializeChat}=useChat();
-    return(
+const MessageList = () => {
+    const { messages, loadChatHistory,currentSessionId } = useChat();
+    useEffect(() => {
+        loadChatHistory()
+    }, [currentSessionId])
+   
+    return (
         <div className=" h-full">
             {messages.length === 0 ?
                 <div className=" flex items-center justify-center h-full">
