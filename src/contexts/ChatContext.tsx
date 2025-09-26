@@ -1,9 +1,10 @@
-import { createContext,useContext,useState  } from "react"
+import { createContext,useContext,useEffect,useState  } from "react"
 import { ProviderPropsType } from "../types/provider.props.type"
 import api from "../services/api"
 import { ChatContextValueType } from "../types/chatContext.type"
 import { MessageDataType } from "../types/message-type"
 import { ChatTitileType } from "../types/chat-title-type"
+import { SendMessageType } from "../types/send-message.type"
 
 const chatContext = createContext({})
 export const useChat=()=>{
@@ -17,6 +18,7 @@ export const ChatProvider =({children}:ProviderPropsType)=>{
     const [messages,setMessages]=useState<MessageDataType[]>([])
     const [quickReplies,setQuickReplies]=useState<string[]>([])
     const [chatTitles,setChatTitles]=useState<ChatTitileType[]>([]);
+    const [currentSessionId,setCurrentSessionId]=useState<string|null>(null);
     const initializeChat=()=>{
         console.log("initialize chat")
         loadQuickReplies()
@@ -31,20 +33,37 @@ export const ChatProvider =({children}:ProviderPropsType)=>{
         }
     }
     const sendMessage =async(message:string)=>{
-        if(!message.trim())return;
-        const userMessage:MessageDataType ={
-            id:Date.now(),
-            role:"user",
-            content:message,
-            timestamp:new Date()
+        try{
+
+            if(!message.trim())return;
+            const userMessage:MessageDataType ={
+                id:Date.now(),
+                role:"user",
+                content:message,
+                timestamp:new Date()
+            }
+            setMessages((prevMessages)=>[...prevMessages,userMessage])
+            const payload:SendMessageType={message:message,sessionId:currentSessionId}
+            const response = await api.post("/chat/send-message",payload)
+            const botMessage:MessageDataType={
+                id:Date.now()+1,
+                role:'assistant',
+                content:response.data.message,
+                timestamp:response.data.timestamp
+
+            }
+            setMessages((prevMessages)=>[...prevMessages,botMessage])
+        }catch(error){
+            console.log("failed to send message for",error)
         }
-        setMessages((prevMessages)=>[...prevMessages,userMessage])
+       
 
 
     }
-    const loadChatHistory=async(searchTitle:string)=>{
+   
+    const loadChatTitles=async(searchTitle:string)=>{
         try{
-            const response=await api.post('/chat/chat-history',{searchTitle})
+            const response=await api.post('/chat/chat-titles',{searchTitle})
             setChatTitles(response.data)
           
         }catch(error){
@@ -52,12 +71,29 @@ export const ChatProvider =({children}:ProviderPropsType)=>{
         }
 
     }
+
+    const loadChatHistory=async()=>{
+        try{
+            if(currentSessionId){
+                const response = await api.post('/chat/chat-history',{sessionId:currentSessionId})
+                setMessages(response.data.messages)
+            }
+
+        }catch(error){
+            console.log(error)
+        }
+    }
+   
     const value:ChatContextValueType={
         messages,
         chatTitles,
         quickReplies,
+        currentSessionId,
+        setCurrentSessionId,
         initializeChat,
-        loadChatHistory,
+        loadChatTitles,
+        sendMessage,
+        loadChatHistory
 
     }
     
