@@ -4,9 +4,9 @@ import { useChat } from "../../contexts/ChatContext";
 
 const SearchFilter = () => {
     const [searchQuery, setSearchQuery] = useState<string>("")
-    const { chatTitles,loadChatHistory } = useChat();
+    const { loadChatTitles } = useChat();
     useEffect(() => {
-        loadChatHistory(searchQuery)
+        loadChatTitles(searchQuery)
     }, [searchQuery])
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value)
