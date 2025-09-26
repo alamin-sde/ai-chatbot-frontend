@@ -2,18 +2,18 @@ import {  MessageSquare, Plus, Trash2, X } from "lucide-react"
 import { useSidebar } from "../../contexts/SidebarContext";
 import SearchFilter from "../ui/SearchFilter";
 import { useChat } from "../../contexts/ChatContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const Sidebar =()=>{
     const {isSidebarOpen,toggleSidebar}=useSidebar();
-    const { chatTitles } = useChat();
-    const [currentTitleId,setCurrentTitleId]=useState<string>("");
+    const { chatTitles,currentSessionId,setCurrentSessionId} = useChat();
+    
+   
     const selectChatSession=(sessionId:string)=>{
-        setCurrentTitleId(sessionId)
+        setCurrentSessionId(sessionId)
 
     }
-    console.log("chattiless===>",chatTitles)
     return(
         <div className={`bg-gray-100 w-80  fixed inset-y-0 z-50 transform ${isSidebarOpen ? 'translate-x-0':'-translate-x-full'} transition-transform duration-300 ease-in-out `}>
             <div className="flex justify-between p-4 border-b shadow-sm border-gray-200 h-16">
@@ -51,7 +51,7 @@ const Sidebar =()=>{
                 {chatTitles.map((chatTitle)=>(
                     <div
                     key={chatTitle.sessionId}
-                    className={`flex rounded-lg p-3  ${currentTitleId===chatTitle.sessionId ? 'bg-blue-500':'bg-slate-50'}`}
+                    className={`flex rounded-lg p-3  ${currentSessionId===chatTitle.sessionId ? 'bg-blue-500':'bg-slate-50'}`}
                     >
                         <div 
                          className="flex-1 flex items-center space-x-2 cursor-pointer"
